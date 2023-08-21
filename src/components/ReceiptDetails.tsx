@@ -1,13 +1,21 @@
+import _ from 'lodash';
+
 import MenuListItem from './MenuListItem';
 
-import { Receipt } from '../types/receipt';
+import { IReceipt } from '../types/receipt';
 import priceToLocal from '../utils/priceToLocal';
 
 type ReceiptDetailsProps = {
-  receipt: Receipt;
+  receipt: IReceipt;
 }
 
 export default function ReceiptDetails({ receipt }: ReceiptDetailsProps) {
+  if (_.isEmpty(receipt)) {
+    return (
+      <p>[영수증 나오는 곳]</p>
+    );
+  }
+
   const { id, menu, totalPrice } = receipt;
   return (
     <div style={{

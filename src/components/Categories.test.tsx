@@ -1,17 +1,23 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+
 import Categories from './Categories';
 
 describe('Categories', () => {
-  it('categories를 렌더링 한다.', () => {
-    const { container } = render((
+  const categories = ['전체', '한식, 중식, 일식'];
+  const setFilterCategory = jest.fn();
+
+  it('renders all categories', () => {
+    render((
       <Categories
-        categories={['한식', '중식', '일식']}
-        setCategory={jest.fn()}
+        categories={categories}
+        setCategory={setFilterCategory}
       />
     ));
 
-    expect(container).toHaveTextContent('한식');
-    expect(container).toHaveTextContent('중식');
-    expect(container).toHaveTextContent('일식');
+    screen.getByText(/전체/);
+
+    categories.forEach((category) => {
+      screen.getByText(category);
+    });
   });
 });

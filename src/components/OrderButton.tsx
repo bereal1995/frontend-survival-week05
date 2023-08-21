@@ -1,9 +1,3 @@
-import useBucketStorage from '../hooks/useBucketStorage';
-import usePostOrder from '../hooks/usePostOrder';
-import useReceipt from '../hooks/useReceipt';
-
-import priceToLocal from '../utils/priceToLocal';
-
 type OrderButtonProps = {
   text: string;
   onClick: () => void;

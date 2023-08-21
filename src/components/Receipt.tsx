@@ -1,15 +1,21 @@
-import { useInterval } from 'usehooks-ts';
+import _ from 'lodash';
 
-import useReceipt from '../hooks/useReceipt';
-import ReceiptDetails from './ReceiptDetails';
+import MenuListItem from './MenuListItem';
+import priceToLocal from '../utils/priceToLocal';
+import { IReceipt } from '../types/receipt';
 
-export default function Receipt() {
-  const { receipt, clearReceipt } = useReceipt();
-  const isPlaying = receipt !== null;
+type ReceiptProps = {
+  receipt: IReceipt;
+}
 
-  useInterval(() => {
-    clearReceipt();
-  }, isPlaying ? 5_000 : null);
+export default function Receipt({ receipt }: ReceiptProps) {
+  if (_.isEmpty(receipt)) {
+    return (
+      <p>[영수증 나오는 곳]</p>
+    );
+  }
+
+  const { id, menu, totalPrice } = receipt;
 
   return (
     <div style={{
@@ -17,11 +23,39 @@ export default function Receipt() {
       padding: '1rem',
     }}
     >
-      {
-        receipt
-          ? <ReceiptDetails receipt={receipt} />
-          : <div>[영수증 나오는 곳]</div>
-      }
+      <div style={{
+        padding: '1rem',
+        border: '1px solid black',
+        textAlign: 'center',
+      }}
+      >
+        <h2>영수증</h2>
+        <div>
+          <h3>주문번호</h3>
+          <p>{id}</p>
+        </div>
+        <div>
+          <h3>주문목록</h3>
+          <ul style={{
+            listStyle: 'none',
+            padding: '0px',
+          }}
+          >
+            {
+              menu.map((menuItem, index) => {
+                const keyId = `${menuItem.id}-${index}`;
+                return (
+                  <MenuListItem
+                    key={keyId}
+                    menu={menuItem}
+                  />
+                );
+              })
+            }
+          </ul>
+        </div>
+        <p>{`총 가격: ${priceToLocal(totalPrice)}원`}</p>
+      </div>
     </div>
   );
 }

@@ -1,25 +1,35 @@
-import { render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import CategoryButton from './CategoryButton';
 
 describe('CategoryButton', () => {
-  it('category를 렌더링 한다.', () => {
-    const { container } = render((
-      <CategoryButton category="한식" setCategory={jest.fn()} />
-    ));
+  const category = '한식';
+  const setFilterCategory = jest.fn();
 
-    expect(container).toHaveTextContent('한식');
+  function renderCategory() {
+    render((
+      <CategoryButton
+        category={category}
+        setCategory={setFilterCategory}
+      />
+    ));
+  }
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('category를 클릭하면 setCategory를 호출한다.', () => {
-    const setCategory = jest.fn();
+  it('renders category text', () => {
+    renderCategory();
 
-    const { getByText } = render((
-      <CategoryButton category="한식" setCategory={setCategory} />
-    ));
+    screen.getByText('한식');
+  });
 
-    getByText('한식').click();
+  it('listens for category click event', () => {
+    renderCategory();
 
-    expect(setCategory).toBeCalledWith('한식');
+    fireEvent.click(screen.getByText('한식'));
+
+    expect(setFilterCategory).toBeCalledWith(category);
   });
 });

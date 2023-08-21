@@ -1,6 +1,6 @@
 import { RestaurantMenuItem } from './restaurants';
 
-export interface Receipt {
+export interface IReceipt {
   id: string;
   menu: RestaurantMenuItem[];
   totalPrice: number;

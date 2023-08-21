@@ -1,16 +1,16 @@
 import { useLocalStorage } from 'usehooks-ts';
 
-import { Receipt } from '../types/receipt';
+import { IReceipt } from '../types/receipt';
 
 export default function useReceipt() {
-  const [receipt, setReceipt] = useLocalStorage<Receipt | null>('receipt', null);
+  const [receipt, setReceipt] = useLocalStorage<IReceipt>('receipt', {} as IReceipt);
 
-  const addReceipt = (newReceipt: Receipt) => {
+  const addReceipt = (newReceipt: IReceipt) => {
     setReceipt(newReceipt);
   };
 
   const clearReceipt = () => {
-    setReceipt(null);
+    setReceipt({} as IReceipt);
   };
 
   return {

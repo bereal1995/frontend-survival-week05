@@ -1,34 +1,33 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import OrderButton from './OrderButton';
 
-const handleClick = jest.fn();
-
 describe('OrderButton', () => {
-  it('OrderButton을 렌더링 한다.', () => {
-    const { getByRole } = render((
-      <OrderButton
-        text="주문하기"
-        onClick={handleClick}
-      />
-    ));
+  const handleClick = jest.fn();
 
-    const orderButton = getByRole('button');
-
-    expect(orderButton).toHaveTextContent(/주문/);
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('주문하기 버튼을 클릭하면 addReceipt을 호출한다.', () => {
-    const { getByRole } = render((
+  function renderOrderButton() {
+    render((
       <OrderButton
         text="주문하기"
         onClick={handleClick}
       />
     ));
+  }
 
-    const orderButton = getByRole('button');
+  it('renders order total price', () => {
+    renderOrderButton();
 
-    fireEvent.click(orderButton);
+    screen.getByText(/주문/);
+  });
+
+  it('listens for order click event', () => {
+    renderOrderButton();
+
+    fireEvent.click(screen.getByText(/주문/));
 
     expect(handleClick).toBeCalled();
   });

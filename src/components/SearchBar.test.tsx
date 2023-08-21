@@ -1,22 +1,37 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import SearchBar from './SearchBar';
 
 describe('SearchBar', () => {
-  it('검색어를 입력하면 검색어가 화면에 출력된다.', () => {
-    const { container } = render((
+  const categories = ['전체', '한식', '중식', '일식'];
+
+  const setFilterText = jest.fn();
+  const setFilterCategory = jest.fn();
+
+  function renderSearchBar() {
+    render((
       <SearchBar
+        categories={categories}
+        setCategory={setFilterCategory}
         value=""
-        setValue={jest.fn()}
-        categories={[]}
-        setCategory={jest.fn()}
+        setValue={setFilterText}
       />
     ));
+  }
 
-    const input = container.querySelector('input');
+  it('renders search label text', () => {
+    renderSearchBar();
 
-    input!.value = '마라탕';
+    screen.getByLabelText(/검색/);
+  });
 
-    expect(input!.value).toBe('마라탕');
+  it('renders all categories', () => {
+    renderSearchBar();
+
+    screen.getByText(/전체/);
+
+    categories.forEach((category) => {
+      screen.getByText(category);
+    });
   });
 });

@@ -1,16 +1,19 @@
 import useBucketStorage from '../hooks/useBucketStorage';
 import usePostOrder from '../hooks/usePostOrder';
-import useReceipt from '../hooks/useReceipt';
+import { IReceipt } from '../types/receipt';
 import priceToLocal from '../utils/priceToLocal';
 import BucketList from './BucketList';
 import OrderButton from './OrderButton';
 
-export default function Bucket() {
+type BucketProps = {
+  addReceipt: (receipt: IReceipt) => void;
+}
+
+export default function Bucket({ addReceipt }: BucketProps) {
   const {
     bucket, totalPrice, clearBasket, removeMenu,
   } = useBucketStorage();
   const { postOrder } = usePostOrder();
-  const { addReceipt } = useReceipt();
 
   const buttonText = `합계: ${priceToLocal(totalPrice)}원 주문`;
 
